@@ -1,0 +1,18 @@
+Urubu - A simple Twitter client for Shell et afins
+
+Current release: alpha with a lot of bugs!
+
+A - How to use?
+R - Just dowload, unpack and execute: 
+	$ python Urubu.py
+
+
+TODO:
+
+Fix logo bugs
+Accept getch()-like input for commands
+
+
+
+License: GPLv3
+
