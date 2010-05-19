@@ -9,6 +9,7 @@ R - Just dowload, unpack and execute:
 
 TODO:
 
+Fix encoding for post new messages (Latin special characteres don't work!)
 Fix logo bugs
 Accept getch()-like input for commands
 
