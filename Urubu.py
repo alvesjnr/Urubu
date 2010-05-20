@@ -32,6 +32,10 @@ class Urubu():
 		self.t = Timer(value,self.plot, [True])
 		self.t.start()
 
+	def reload(self):
+		#reload from twitter server
+		self.plot()
+
 	def plot(self, _schedule_another_plot = False):	
 		if self._enable_plot and self._user_online:	
 			tl = self.api.GetFriendsTimeline()
