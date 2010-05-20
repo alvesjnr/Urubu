@@ -19,19 +19,20 @@ class Urubu():
 		
 
 	def start(self):
-		print "Urubu - a [very] simple Twitter client for shell et afins"
+		print 
+		print "Urubu - A [very] simple Twitter client for shell et afins"
 		print "Type 'h<enter>' to help"
 		while self.working: self.run()
 		
 
 
-	def createTimer(self,value = 30):
+	def createTimer(self,value = 3):
 		if not self.working:
 			return
-		self.t = Timer(value,self.plot)
+		self.t = Timer(value,self.plot, [True])
 		self.t.start()
 
-	def plot(self):	
+	def plot(self, _schedule_another_plot = False):	
 		if self._enable_plot and self._user_online:	
 			tl = self.api.GetFriendsTimeline()
 			tl = tl[::-1]			
@@ -40,7 +41,7 @@ class Urubu():
 				print i.GetCreatedAt()
 				print i.text.encode('UTF-8')
 				print															
-		self.createTimer()
+		if _schedule_another_plot: self.createTimer()
 		print '->',
 
 	def run(self):
@@ -66,12 +67,15 @@ class Urubu():
 		elif i == 'b':
 			self.about()
 		elif i == 's':
-			self.setings()	
-	
+			self.settings()	
+		else:
+			print "Type 'h<enter>' for help"
 		self._enable_plot = True
 		return
 
 
+	def settings(self):
+		print 'Not Yet Implemented'
 
 	def input(self):
 		if not self._user_online:
@@ -119,7 +123,7 @@ class Urubu():
 		print 'i - Input a new message'
 		print 'r - Reload Tweets'
 		print 'b - About'
-		print 's - Seeting'
+		print 's - Settings'
 		print 'q - Quit'
 		
 
@@ -137,9 +141,7 @@ class Urubu():
 		if self.confirm():
 			self.working = False
 			try:
-				self.t.cancel()
-				if self.t.isAlive():
-					self.t.is_alive = False
+				self.t.cancel()									
 			except:
 				pass			
 			print "Bye..."
