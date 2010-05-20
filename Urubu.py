@@ -26,7 +26,7 @@ class Urubu():
 		
 
 
-	def createTimer(self,value = 3):
+	def createTimer(self,value = 30):
 		if not self.working:
 			return
 		self.t = Timer(value,self.plot, [True])
