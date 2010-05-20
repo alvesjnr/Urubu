@@ -1,4 +1,4 @@
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __Author__ = 'Antonio "john" Junior'
 __license__ = "GPLv3"
 
@@ -6,7 +6,7 @@ __license__ = "GPLv3"
 import twitter
 from threading import Timer
 from getpass import getpass
-
+import termios, sys, tty
 
 class Urubu():
 
@@ -33,6 +33,9 @@ class Urubu():
 		self.t.start()
 
 	def reload(self):
+		if not self._user_online:
+			print "You must login before view yours tweets!"
+			return
 		#reload from twitter server
 		self.plot()
 
@@ -46,16 +49,16 @@ class Urubu():
 				print i.text.encode('UTF-8')
 				print															
 		if _schedule_another_plot: self.createTimer()
-		print '->',
 
 	def run(self):
 		try:
-			i = raw_input('->')
+			print '->',
+			i = getch()
+			print i
 			self._enable_plot = False
 		except KeyboardInterrupt:
 			self._enable_plot = True
 			return None
-
 		if i == 'i':
 			self.input()
 		elif i == 'h':
@@ -63,6 +66,7 @@ class Urubu():
 		elif i == 'q':
 			self.quit()
 		elif i == 'r':
+			self._enable_plot = True
 			self.reload()
 		elif i == 'l':
 			self.login()
@@ -73,8 +77,7 @@ class Urubu():
 		elif i == 's':
 			self.settings()	
 		else:
-			print "Type 'h<enter>' for help"
-		self._enable_plot = True
+			print "Type 'h<enter>' for help"		
 		return
 
 
@@ -151,6 +154,15 @@ class Urubu():
 			print "Bye..."
 			
 
+
+def getch():
+	fd = sys.stdin.fileno()
+	old_attr = termios.tcgetattr(fd)
+	tty.setraw(sys.stdin.fileno())
+	ch = sys.stdin.read(1) 
+	termios.tcsetattr(fd, termios.TCSAFLUSH, old_attr) 
+	return ch
+	
 if __name__ == "__main__":
 	u = Urubu()
 	u.start()
