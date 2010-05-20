@@ -19,6 +19,8 @@ class Urubu():
 		
 
 	def start(self):
+		print "Urubu - a [very] simple Twitter client for shell et afins"
+		print "Type 'h<enter>' to help"
 		while self.working: self.run()
 		
 
