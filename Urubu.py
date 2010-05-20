@@ -41,19 +41,21 @@ class Urubu():
 
 	def plot(self, _schedule_another_plot = False):	
 		if self._enable_plot and self._user_online:	
+			if self._on_getch: self.getchPause()
 			tl = self.api.GetFriendsTimeline()
 			tl = tl[::-1]			
 			for i in tl:
 				print i.GetUser().screen_name
 				print i.GetCreatedAt()
 				print i.text.encode('UTF-8')
-				print															
+				print
+			if self._on_getch: self.getchBack()
 		if _schedule_another_plot: self.createTimer()
 
 	def run(self):
 		try:
 			print '->',
-			i = getch()
+			i = self.getch()
 			print i
 			self._enable_plot = False
 		except KeyboardInterrupt:
@@ -155,14 +157,27 @@ class Urubu():
 			
 
 
-def getch():
-	fd = sys.stdin.fileno()
-	old_attr = termios.tcgetattr(fd)
-	tty.setraw(sys.stdin.fileno())
-	ch = sys.stdin.read(1) 
-	termios.tcsetattr(fd, termios.TCSAFLUSH, old_attr) 
-	return ch
+	def getch(self):
+		self._on_getch = True
+		fd = sys.stdin.fileno()
+		old_attr = termios.tcgetattr(fd)
+		tty.setraw(sys.stdin.fileno())
+		self._normal_getch = (fd, termios.TCSAFLUSH, old_attr) 
+		ch = sys.stdin.read(1) 
+		termios.tcsetattr(fd, termios.TCSAFLUSH, old_attr) 
+		self._on_getch = False
+		return ch
 	
+
+	def getchPause(self):
+		termios.tcsetattr(self._normal_getch[0], self._normal_getch[1], 
+self._normal_getch[2])
+	
+	def getchBack(self):
+		tty.setraw(sys.stdin.fileno())
+	
+
+
 if __name__ == "__main__":
 	u = Urubu()
 	u.start()
